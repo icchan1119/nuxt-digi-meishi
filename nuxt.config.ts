@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   ],
   app: {
     head: {
-      title: 'Your Title',
+      title: '合同会社LEQUIT',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },

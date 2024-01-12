@@ -86,7 +86,7 @@ const call = () => {
         </div>
         <div id="main">
             <div class="image">
-                <img src="https://dummyimage.com/500x500/000/fff&text=顔">
+                <img src="@/assets/images/kao.jpg">
             </div>
             <div class="profile_name">
                 <ruby>こばしがわ　いつき</ruby>
