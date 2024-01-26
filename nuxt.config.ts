@@ -8,9 +8,11 @@ export default defineNuxtConfig({
     '@/plugins/fontawesome.ts',
     '@/plugins/gsap.ts'
   ],
+
+  spaLoadingTemplate: "./html/loader.html",
   app: {
     head: {
-      title: '合同会社LEQUIT',
+      title: '合同会社沖縄新地',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
