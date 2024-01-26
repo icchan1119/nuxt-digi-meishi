@@ -103,9 +103,9 @@ onUnmounted(() => {
     <div class="visions">
         <div class="my_vision">My Vision</div>
         <div class="line"></div>
-        <div class="head_center">マイナーをメジャーに</div>
+        <div class="head_center">オリジナリティを追求し<br>成功の鍵を生み出す</div>
         <div class="line"></div>
-        <div class="company">合同会社LEQUIT</div>
+        <div class="company">(仮) 合同会社沖縄新地</div>
     </div>
     <div class="bottom_btn" ref="bottom" @click="bombUp">
         <font-awesome-icon icon="chevron-up" ref="arrowUp" size="2x" class="arrowUp" />

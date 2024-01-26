@@ -82,7 +82,7 @@ const call = () => {
 <template>
     <div class="profile">
         <div id="header">
-            合同会社LEQUIT
+            (仮) 合同会社沖縄新地
         </div>
         <div id="main">
             <div class="image">
@@ -110,9 +110,11 @@ const call = () => {
                     @leave="leave"
                 >
                     <div class="description_txt" v-if="isDescription">
-                        20歳大学生<br>
-                        フリーエンジニアとして様々な企業と携わっております<br>
-                        将来は就職しません
+                        初めまして。<br>
+                        小橋川と申します。<br><br>
+                        大学生 × Webエンジニア<br><br>
+                        Webサイト制作以外にも、Webデザイン、<br>画像編集、動画編集など可能です。<br>
+                        依頼等はインスタグラムのDMからお願いします。
                     </div>
                 </transition>
                 <font-awesome-icon icon="chevron-down" ref="arrowUp" size="1x" class="arrowUp" />
