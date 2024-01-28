@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref,onMounted } from 'vue';
+// デプロイテスト
 const piliod = ref<string>('');
 const load = ref<number>(0);
 onMounted(() => {
