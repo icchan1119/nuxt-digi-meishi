@@ -5,19 +5,19 @@ const isMobile = ref(false);
 const arrowUp = ref(null);
 const isProfile = ref(false);
 
-const transitionName = ref('fade');
+const transitionName = ref<string>('fade');
 
 const { $gsap: gsap } = useNuxtApp();
 const swipeContainer = ref(null);
 const startY = ref(0);
 const endY = ref(0);
-const swipeDirection = ref(null);
+const swipeDirection = ref<any>(null);
 
-const handleTouchStart = (event) => {
+const handleTouchStart = (event: any) => {
       startY.value = event.touches[0].clientY;
 };
 
-const handleTouchMove = (event) => {
+const handleTouchMove = (event: any) => {
       endY.value = event.touches[0].clientY;
 };
 
