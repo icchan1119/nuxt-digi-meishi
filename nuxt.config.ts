@@ -1,7 +1,7 @@
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: true,
   devtools: { enabled: true },
   css: ["@/assets/styles/main.scss","@fortawesome/fontawesome-svg-core/styles.css"],
   // Viteのビルドの際に、SCSSのパーシャルファイルを読み込むよう指定する
@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@/plugins/gsap.ts'
   ],
 
-  spaLoadingTemplate: "./html/loader.html",
+  // spaLoadingTemplate: "./html/loader.html",
   app: {
     head: {
       title: '合同会社沖縄新地',
