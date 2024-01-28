@@ -17,7 +17,7 @@ onMounted(() => {
 <template>
   <div id="root">
     <div id="load">
-      <img src="@/assets/images/IMG_6179.gif" >
+      <img src="~/assets/images/catload.gif" >
       <p>Now Loading{{ piliod }}</p>
     </div>
   </div>
@@ -27,7 +27,7 @@ onMounted(() => {
   @font-face {
     font-family: 'dotfont'; /* フォント名 */
     /* フォーマットごとにパスを指定 */
-    src: url('@/assets/fonts/dotfont.ttf') format('truetype');
+    src: url('~/assets/fonts/dotfont.ttf') format('truetype');
   }
   #root{
     background-color: #000000;
