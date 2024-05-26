@@ -39,7 +39,6 @@ onMounted(() => {
     const mainMovie = document.getElementById('video') as HTMLVideoElement;
 
     checkWindowSize();
-    console.log(mainMovie);
 
     // ウィンドウのサイズが変更されたときにcheckWindowSizeを呼び出す
     window.addEventListener('resize', checkWindowSize);
@@ -123,7 +122,7 @@ const call = () => {
       <OneShot v-if="isWelcomeBoard" />
     </transition>
     <div class="main">
-      <video id="video" webkit-playsinline playsinline muted>
+      <video id="video" src="@/assets/movies/layer.mp4" webkit-playsinline playsinline muted>
         <!--
           poster：動画ファイルが利用できない環境で代替表示される画像
           webkit-playsinline：iOS 9までのSafari用インライン再生指定
@@ -133,7 +132,6 @@ const call = () => {
           loop：動画をループさせる
           controls：コントロールバーを表示する
          -->
-        <source src="@/assets/movies/layer.mp4" type="video/mp4">
         <p>動画を再生できる環境ではありません。</p>
       </video>
       <div class="bbs">
