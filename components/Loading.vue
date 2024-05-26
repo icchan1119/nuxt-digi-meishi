@@ -18,8 +18,7 @@ onMounted(() => {
 <template>
   <div id="root">
     <div id="load">
-      <img src="~/assets/images/catload.gif" >
-      <p>Now Loading{{ piliod }}</p>
+      <p>Now Loading</p>
     </div>
   </div>
 </template>

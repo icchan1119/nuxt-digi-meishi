@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   // Viteのビルドの際に、SCSSのパーシャルファイルを読み込むよう指定する
   plugins: [
     '@/plugins/fontawesome.ts',
-    '@/plugins/gsap.ts'
+    '@/plugins/gsap.ts',
   ],
 
   // spaLoadingTemplate: "./html/loader.html",
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
         // fontawesome
         { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css', integrity: 'sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp', crossorigin: 'anonymous'},
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;500;700&display=swap'},
-      ],
+      ]
     },
   },
   vite: {

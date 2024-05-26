@@ -1,67 +1,30 @@
 <script setup lang="ts">
+import { Ref } from 'vue';
 import { ref, onMounted, onUnmounted } from 'vue';
+// import { Particles } from 'nuxt-particles';
 
-const isMobile = ref(false);
-const arrowUp = ref(null);
-const isProfile = ref(false);
-
-const transitionName = ref<string>('fade');
-
+const isMobile: Ref<boolean> = ref(false);
+const isWelcomeBoard: Ref<boolean> = ref(true);
 const { $gsap: gsap } = useNuxtApp();
-const swipeContainer = ref(null);
-const startY = ref(0);
-const endY = ref(0);
-const swipeDirection = ref<any>(null);
+const modal_message: Ref<string> = ref("");
+const modal_memory: Ref<string> = ref("");
 
-const handleTouchStart = (event: any) => {
-      startY.value = event.touches[0].clientY;
+const isModalOpen: Ref<boolean> = ref(false);
+
+const openModal = (): void => {
+      isModalOpen.value = true;
 };
 
-const handleTouchMove = (event: any) => {
-      endY.value = event.touches[0].clientY;
+const closeModal = (): void => {
+    isModalOpen.value = false;
 };
 
-const handleTouchEnd = () => {
-    const deltaY = endY.value - startY.value;
-
-    if (deltaY > 240) {
-        swipeDirection.value = 'down';
-    } else if (deltaY < -240) {
-        swipeDirection.value = 'up';
-    }
-
-    console.log(deltaY);
-
-    if(swipeDirection.value == 'up'){
-        isProfile.value = true;
-    } else if (swipeDirection.value == 'down') {
-        isProfile.value = false;
-    }
-};
-
-const bottom = ref();
-const background = ref();
-let ctx;
-
-const beforeEnter = (el) => {
-  el.style.opacity = 0;
-};
-
-const enter = (el, done) => {
-  gsap
-    .fromTo(
-        el, 
-        { opacity: 0, y:320, onComplete: done },
-        { opacity: 1, duration: 0.2, y:0, onComplete: done }
-    );
-};
-
-const leave = (el, done) => {
-  gsap.to(el, { opacity: 0, y:320, duration: 0.2, onComplete: done });
-};
+const flyLink = (): void => {
+    location.href = modal_memory.value;
+}
 
 // ウィンドウのサイズが変更されたときにcheckWindowSizeを呼び出す
-const checkWindowSize = () => {
+const checkWindowSize = (): void => {
   // ウィンドウの幅を取得
   const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   const smartphoneSize = 560;
@@ -70,54 +33,192 @@ const checkWindowSize = () => {
   isMobile.value = windowWidth >= smartphoneSize;
 };
 
-const bombUp = () => {
-    console.log('ok')
-    isProfile.value = true;
-}
-
 onMounted(() => {
     // ページ読み込み時にも初回のチェックを行う
+
+    const mainMovie = document.getElementById('video') as HTMLVideoElement;
+
     checkWindowSize();
+    console.log(mainMovie);
 
     // ウィンドウのサイズが変更されたときにcheckWindowSizeを呼び出す
     window.addEventListener('resize', checkWindowSize);
 
-    console.log('page read ok')
-    ctx = gsap.context((self) => {
-        const boxes = self.selector('.arrowUp');
-        let tl = gsap
-            .timeline()
-            .to(".arrowUp", { y: -90, opacity: 0 }).repeat(-1);
-    }, bottom.value); // <- Scope!
+    setTimeout(() => {
+      isWelcomeBoard.value = false;
+    }, 4000);
+
+    const playCount: number = 7.5;
+
+    if (mainMovie) {
+        setTimeout(() => {
+          mainMovie.play();
+          setTimeout((done: () => void) => {
+             // gsap.set('.bbs', {opacity: 0});
+            gsap.to('.bbs',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs2',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs3',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs4',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs5',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs6',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs7',{ opacity: 1, onComplete: done});
+            gsap.to('.bbs8',{ opacity: 1, onComplete: done});
+
+            setTimeout(() => {
+              gsap.to('.my_profile_card',{ opacity: 1, onComplete: done});
+            }, 500);
+          }, playCount*1000);
+        }, 3500);
+    }
 });
 
 onUnmounted(() => {
   // コンポーネントがアンマウントされたときにリスナーを解除
   window.removeEventListener('resize', checkWindowSize);
-  ctx.revert();
 });
+
+const transitionName = ref<string>('fadeOut');
+const beforeEnter = (el: any) => {
+  gsap.set(el, { opacity: 0 });
+};
+
+const enter = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 1, onComplete: done});
+};
+
+const leave = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 0, onComplete: done});
+};
+
+const follow = () => {
+    modal_message.value = "Instagramのページへ飛びます。";
+    modal_memory.value = "https://www.instagram.com/itsuki_kb_ts";
+    openModal();
+}
+
+const call = () => {
+    modal_message.value = "電話をかけますか？";
+    modal_memory.value = "tel:09037955768";
+    openModal();
+}
 </script>
 <template>
-  <div class="background" ref="background" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+  <div class="background" ref="background">
+    <Modal :showModal="isModalOpen" @update:showModal="closeModal">
+            <!-- モーダルの中身 -->
+            <p>{{ modal_message }}</p>
+            <div class="nuxt-modal-btn">
+                <button class="btn true" @click="closeModal" v-if="!modal_memory">OK</button>
+                <button class="btn true" @click="flyLink" v-if="modal_memory">YES</button>
+                <button class="btn" @click="closeModal" v-if="modal_memory">NO</button>
+            </div>
+    </Modal>
     <PcBan v-if="isMobile"/>
-    <div class="visions">
-        <div class="my_vision">My Vision</div>
-        <div class="line"></div>
-        <div class="head_center">オリジナリティを追求し<br>成功の鍵を生み出す</div>
-        <div class="line"></div>
-        <div class="company">(仮) 合同会社沖縄新地</div>
-    </div>
-    <div class="bottom_btn" ref="bottom" @click="bombUp">
-        <font-awesome-icon icon="chevron-up" ref="arrowUp" size="2x" class="arrowUp" />
-        <p>上にスワイプしてください</p>
-    </div>
-        <transition
+    <transition
         :name="transitionName"
         @before-enter="beforeEnter"
         @enter="enter"
         @leave="leave"
-        >
-            <Profile v-if="isProfile"/>
-        </transition>
+    >
+      <OneShot v-if="isWelcomeBoard" />
+    </transition>
+    <div class="main">
+      <video id="video" webkit-playsinline playsinline muted>
+        <!--
+          poster：動画ファイルが利用できない環境で代替表示される画像
+          webkit-playsinline：iOS 9までのSafari用インライン再生指定
+          playsinline：iOS 10以降のSafari用インライン再生指定
+          muted：音声をミュートさせる
+          autoplay：動画を自動再生させる
+          loop：動画をループさせる
+          controls：コントロールバーを表示する
+         -->
+        <source src="@/assets/movies/layer.mp4" type="video/mp4">
+        <p>動画を再生できる環境ではありません。</p>
+      </video>
+      <div class="bbs">
+        <ul>
+          <li v-for="i in 9">ただのフリーランスです</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">ただのフリーランスです</li>
+        </ul>
+      </div>
+      <div class="bbs2">
+        <ul>
+          <li v-for="i in 9">デザイナーやってます</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">デザイナーやってます</li>
+        </ul>
+      </div>
+      <div class="bbs3">
+        <ul>
+          <li v-for="i in 9">問題児に見えるだけです</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">問題児に見えるだけです</li>
+        </ul>
+      </div>
+      <div class="bbs4">
+        <ul>
+          <li v-for="i in 9">実際はただの変人です</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">実際はただの変人です</li>
+        </ul>
+      </div>
+      <div class="bbs5">
+        <ul>
+          <li v-for="i in 9">クスリはやってません</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">クスリはやってません</li>
+        </ul>
+      </div>
+      <div class="bbs6">
+        <ul>
+          <li v-for="i in 9">wwwwwwwwwww</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">wwwwwwwwwww</li>
+        </ul>
+      </div>
+      <div class="bbs7">
+        <ul>
+          <li v-for="i in 9">あははははは</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">あははははは</li>
+        </ul>
+      </div>
+      <div class="bbs8">
+        <ul>
+          <li v-for="i in 9">娑婆は暑いよね</li>
+        </ul>
+        <ul>
+          <li v-for="i in 9">娑婆は暑いよね</li>
+        </ul>
+      </div>
+      <div class="my_profile_card">
+        <div class="image">
+                <img src="@/assets/images/kao.jpg">
+        </div>
+        <div class="profile_name">
+                <ruby>こばしがわ　いつき</ruby>
+                <p id="name">小橋川　樹</p>
+        </div>
+        <div class="iro_iro">
+          合同会社マジムンスタジオ　代表社員
+        </div>
+        <div class="follow_btn">
+                <button @click="follow">インスタを見る</button>
+        </div>
+        <div class="follow_btn2">
+                <button @click="call">電話する</button>
+                <button @click="contactForm">Contact</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
+import Modal from './components/Modal.vue';
   const { $gsap: gsap } = useNuxtApp();
   const isLoading = ref<boolean>(true);
   const transitionName = ref<string>('fade');
