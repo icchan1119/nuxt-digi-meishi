@@ -122,7 +122,7 @@ const call = () => {
       <OneShot v-if="isWelcomeBoard" />
     </transition>
     <div class="main">
-      <video id="video" src="@/assets/movies/layer.mp4" webkit-playsinline playsinline muted>
+      <video id="video" src="@/assets/movies/layer_1.mp4" webkit-playsinline playsinline muted>
         <!--
           poster：動画ファイルが利用できない環境で代替表示される画像
           webkit-playsinline：iOS 9までのSafari用インライン再生指定
