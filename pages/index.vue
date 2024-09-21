@@ -6,8 +6,13 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const isMobile: Ref<boolean> = ref(false);
 const isWelcomeBoard: Ref<boolean> = ref(true);
 const { $gsap: gsap } = useNuxtApp();
+const { $swal: swal} = useNuxtApp();
 const modal_message: Ref<string> = ref("");
 const modal_memory: Ref<string> = ref("");
+
+const trueProfile: Ref<boolean> = ref(false);
+
+const backButton: Ref<boolean> = ref(false);
 
 const isModalOpen: Ref<boolean> = ref(false);
 
@@ -21,6 +26,11 @@ const closeModal = (): void => {
 
 const flyLink = (): void => {
     location.href = modal_memory.value;
+}
+
+const checkActivity = (): void => {
+    trueProfile.value = true;
+    backButton.value = true;
 }
 
 // ウィンドウのサイズが変更されたときにcheckWindowSizeを呼び出す
@@ -51,22 +61,9 @@ onMounted(() => {
 
     if (mainMovie) {
         setTimeout(() => {
-          mainMovie.play();
-          setTimeout((done: () => void) => {
-             // gsap.set('.bbs', {opacity: 0});
-            gsap.to('.bbs',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs2',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs3',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs4',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs5',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs6',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs7',{ opacity: 1, onComplete: done});
-            gsap.to('.bbs8',{ opacity: 1, onComplete: done});
-
-            setTimeout(() => {
-              gsap.to('.my_profile_card',{ opacity: 1, onComplete: done});
+          setTimeout(() => {
+              gsap.to('.my_profile_card',{ opacity: 1, y:-100});
             }, 500);
-          }, playCount*1000);
         }, 3500);
     }
 });
@@ -77,9 +74,15 @@ onUnmounted(() => {
 });
 
 const transitionName = ref<string>('fadeOut');
+const transitionProfileName = ref<string>('proFadeIn');
 const beforeEnter = (el: any) => {
   gsap.set(el, { opacity: 0 });
 };
+
+const hideProfile = () => {
+  trueProfile.value = false;
+  backButton.value = false;
+}
 
 const enter = (el: any, done: () => void) => {
     gsap.to(el, { opacity: 1, onComplete: done});
@@ -89,16 +92,105 @@ const leave = (el: any, done: () => void) => {
     gsap.to(el, { opacity: 0, onComplete: done});
 };
 
+const proEnter = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 1,scaleX:1, scaleY:1, duration: 0.2, onComplete: done});
+};
+
+const proLeave = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 0, scaleX:0.7, scaleY:0.7, duration: 0.3, onComplete: done});
+};
+
+const buttonEnter = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 1,scaleX:1, scaleY:1, duration: 0.2, onComplete: done});
+};
+
+const buttonLeave = (el: any, done: () => void) => {
+    gsap.to(el, { opacity: 0, y: 100, duration: 0.3, onComplete: done});
+};
+
 const follow = () => {
-    modal_message.value = "Instagramのページへ飛びます。";
-    modal_memory.value = "https://www.instagram.com/itsuki_kb_ts";
-    openModal();
+    swal.fire({
+      title: "💬📸💬",
+      text: "Instagramのページへ移動します。",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "はい",
+      cancelButtonText: "いいえ"
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        location.href="https://instagram.com/itsuki_kb_ts";
+      } 
+    });
 }
 
 const call = () => {
-    modal_message.value = "電話をかけますか？";
-    modal_memory.value = "tel:09037955768";
-    openModal();
+    swal.fire({
+      title: "🤙〰️📱",
+      text: "電話をかけますか？",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "はい",
+      cancelButtonText: "いいえ"
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        location.href="tel:09037955768";
+      } 
+    });
+}
+
+const remember = () => {
+  swal.fire({
+      title: "📩👉🧠💾",
+      text: "メールアドレスを入力してください。",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off"
+      },
+      preConfirm: async (email) => {
+      try {
+        const githubUrl = `
+          https://hyperform.jp/api/WUzZC85a
+        `;
+        const response = await fetch(githubUrl,{
+          method: 'POST',
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "default", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email: email
+          })
+        });
+        if (!response.ok) {
+          return swal.showValidationMessage(`
+            ${JSON.stringify(await response.json())}
+          `);
+        }
+        return response.json();
+      } catch (error) {
+        swal.showValidationMessage(`
+          エラーが発生しました。
+        `);
+      }
+  },
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "送信",
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        swal.fire({
+          title: `${result.value.login}'s avatar`,
+          imageUrl: result.value.avatar_url
+        });
+      } 
+  });
 }
 </script>
 <template>
@@ -134,70 +226,6 @@ const call = () => {
          -->
         <p>動画を再生できる環境ではありません。</p>
       </video>
-      <div class="bbs">
-        <ul>
-          <li v-for="i in 9">ただのフリーランスです</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">ただのフリーランスです</li>
-        </ul>
-      </div>
-      <div class="bbs2">
-        <ul>
-          <li v-for="i in 9">デザイナーやってます</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">デザイナーやってます</li>
-        </ul>
-      </div>
-      <div class="bbs3">
-        <ul>
-          <li v-for="i in 9">問題児に見えるだけです</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">問題児に見えるだけです</li>
-        </ul>
-      </div>
-      <div class="bbs4">
-        <ul>
-          <li v-for="i in 9">実際はただの変人です</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">実際はただの変人です</li>
-        </ul>
-      </div>
-      <div class="bbs5">
-        <ul>
-          <li v-for="i in 9">クスリはやってません</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">クスリはやってません</li>
-        </ul>
-      </div>
-      <div class="bbs6">
-        <ul>
-          <li v-for="i in 9">wwwwwwwwwww</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">wwwwwwwwwww</li>
-        </ul>
-      </div>
-      <div class="bbs7">
-        <ul>
-          <li v-for="i in 9">あははははは</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">あははははは</li>
-        </ul>
-      </div>
-      <div class="bbs8">
-        <ul>
-          <li v-for="i in 9">娑婆は暑いよね</li>
-        </ul>
-        <ul>
-          <li v-for="i in 9">娑婆は暑いよね</li>
-        </ul>
-      </div>
       <div class="my_profile_card">
         <div class="image">
                 <img src="@/assets/images/kao.jpg">
@@ -207,16 +235,39 @@ const call = () => {
                 <p id="name">小橋川　樹</p>
         </div>
         <div class="iro_iro">
-          合同会社マジムンスタジオ　代表社員
+          マジムンスタジオ　代表
         </div>
         <div class="follow_btn">
-                <button @click="follow">インスタを見る</button>
+                <button @click="follow">つながる</button>
         </div>
-        <div class="follow_btn2">
-                <button @click="call">電話する</button>
-                <button @click="contactForm">Contact</button>
+        <div class="follow_btn15">
+                <button @click="checkActivity">何者か見る</button>
+        </div>
+        <div class="follow_btn19">
+                <button @click="call">電話をかける</button>
+        </div>
+        <div class="follow_btn24">
+                <button @click="remember">おぼえる</button>
         </div>
       </div>
+      <transition
+        :name="transitionName"
+        @before-enter="beforeEnter"
+        @enter="proEnter"
+        @leave="proLeave"
+      >
+        <Profile v-if="trueProfile" />
+      </transition>
+      <transition
+        :name="transitionName"
+        @before-enter="beforeEnter"
+        @enter="buttonEnter"
+        @leave="buttonLeave"
+      >
+        <button class="back-button" @click="hideProfile" v-if="backButton">
+          <img src="../assets/images/home.svg">
+        </button>
+      </transition>
     </div>
   </div>
 </template>
