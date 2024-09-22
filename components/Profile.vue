@@ -19,7 +19,7 @@ const isModalOpen = ref(false);
                 <img src="../assets/images/mslogo.jpg">
             </div>
             <div class="mvv">
-                <h1>革新的なクリエイティブで<br>IT市場をもっと強く</h1>
+                <h1>革新的なクリエイティブで<br>ITをもっと強く</h1>
                 <p class="description">
                     マジムンスタジオ代表<br>
                     小橋川　樹です。<br>
